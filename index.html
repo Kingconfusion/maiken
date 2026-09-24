@@ -74,7 +74,7 @@ label{font-weight:700;display:block;margin:14px 0 6px}
 .howto li{margin-bottom:.6em}
 .note{background:#EEF3E6;border-left:4px solid var(--olive);padding:10px 14px;border-radius:6px;margin:14px 0}
 
-.mini{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;margin:4px 0 18px}
+.mini{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:4px 0 18px}
 .mini button{aspect-ratio:1;border:2px solid var(--line);border-radius:4px;background:#fff;cursor:pointer;padding:0}
 .mini button[aria-current="true"]{border-color:var(--purple);border-width:3px}
 .mission{border:2px dashed var(--teal);border-radius:12px;padding:20px}
@@ -114,7 +114,7 @@ label{font-weight:700;display:block;margin:14px 0 6px}
 footer{margin-top:40px;text-align:center}
 footer button{background:none;border:0;color:var(--teal);text-decoration:underline;cursor:pointer}
 
-@media (max-width:560px){ .mini{grid-template-columns:repeat(6,1fr)} .panel{padding:20px 16px} }
+@media (max-width:560px){ .mini{grid-template-columns:repeat(7,1fr)} .panel{padding:20px 16px} }
 @media (prefers-reduced-motion:reduce){ .rolling .face{animation:none} .lapp{transform:none} }
 </style>
 </head>
@@ -188,16 +188,8 @@ const MISSIONS = [
     tips:p=>[p.interesse.kw[0], "hands close up"] },
   { t:"Lørdag kveld", f:"lordag", q:"Hvor er hun lørdag kveld, og hvem er hun sammen med?",
     tips:p=>[p.bosted.kw[1]+" night", "friends dinner", p.interesse.kw[1]] },
-  { t:"Hva har hun i veska?", f:"veska", q:"Hvis du tømmer veska hennes på bordet, hva ligger der?",
-    tips:p=>["bag contents flat lay", p.interesse.item] },
-  { t:"Utsikten fra vinduet", f:"utsikt", q:"Hva ser hun når hun står ved vinduet og drikker kaffe?",
-    tips:p=>[p.bosted.view, "view from window"] },
   { t:"Noe hun tar på hver dag", f:"tekstur", q:"Hvilken tekstur kjenner hendene hennes hver dag? Tenk nærbilde av en overflate.",
     tips:p=>[p.jobb.touch+" texture", p.interesse.touch+" texture"] },
-  { t:"Middagen hennes", f:"middag", q:"Hva spiser hun til middag når hun er alene hjemme en vanlig dag?",
-    tips:p=>["dinner for one", "simple home cooking"] },
-  { t:"Hvordan kommer hun seg rundt?", f:"transport", q:"Hvordan kommer hun seg til jobb eller skole?",
-    tips:p=>[p.bosted.move, "commute"] },
   { t:"Den uventede tingen", f:"uventet", q:"Hvordan viser du det ingen vet om henne, uten å si det rett ut?",
     tips:p=>p.uventet.kw }
 ];
@@ -211,7 +203,7 @@ const QUIZ = [
 ];
 
 const STEP_TITLES = ["Trill din Maiken","Bli kjent med Maiken","Oppdragene","Sett sammen i Canva","Tekst og fonter","Palett og refleksjon","Ferdig"];
-const KEY = "maiken-collage-v5";
+const KEY = "maiken-collage-v6";
 
 function fresh(){ return { step:0, roll:null, quiz:{}, qi:0, mission:-1, colors:{}, done:{},
   fonts:{head:"",quote:"",word:""}, why:{head:"",quote:"",word:""},
