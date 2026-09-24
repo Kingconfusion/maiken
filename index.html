@@ -168,14 +168,6 @@ const CATS = [
   ]}
 ];
 
-const COLORS = [
-  { t:"Rød", en:"red", shades:["#F7C6C6","#E86A6A","#C62828","#8E1B1B","#4A0E0E"] },
-  { t:"Blå", en:"blue", shades:["#CFE3F7","#7FB2E5","#2F6DB5","#1B3F73","#0D1F3A"] },
-  { t:"Gul", en:"yellow", shades:["#FFF3C4","#FFE066","#F2C200","#C79A00","#7A5E00"] },
-  { t:"Grønn", en:"green", shades:["#D6EFD2","#8FCB87","#3E9A3A","#1F5E1D","#0F2E0E"] },
-  { t:"Rosa", en:"pink", shades:["#FBE0EE","#F4A7CF","#E26BAA","#B03A7A","#6E1F4B"] },
-  { t:"Svart og hvit", en:"black and white", shades:["#FFFFFF","#D9D9D9","#9A9A9A","#4D4D4D","#000000"] }
-];
 
 const MISSIONS = [
   { t:"Hvor våkner hun?", f:"vakner", q:"Hvordan ser det ut rundt henne når hun åpner øynene? Lys, rot, hva står på nattbordet?",
@@ -203,9 +195,9 @@ const QUIZ = [
 ];
 
 const STEP_TITLES = ["Trill din Maiken","Bli kjent med Maiken","Oppdragene","Sett sammen i Canva","Tekst og fonter","Palett og refleksjon","Ferdig"];
-const KEY = "maiken-collage-v6";
+const KEY = "maiken-collage-v7";
 
-function fresh(){ return { step:0, roll:null, quiz:{}, qi:0, mission:-1, colors:{}, done:{},
+function fresh(){ return { step:0, roll:null, quiz:{}, qi:0, mission:-1, done:{},
   fonts:{head:"",quote:"",word:""}, why:{head:"",quote:"",word:""},
   palette:["#ffffff","#ffffff","#ffffff","#ffffff","#ffffff"], away:"", dislike:"" }; }
 let state = load() || fresh();
@@ -271,30 +263,25 @@ function(){
 },
 function(){
   if(state.mission<0){
-    return '<h2>Oppdragene</h2><p>Du får '+MISSIONS.length+' oppdrag. I hvert oppdrag triller du én farge og finner '+PER_MISSION+' bilder som passer temaet og fargen. Du setter ikke sammen noe ennå, du bare samler.</p>'+
+    return '<h2>Oppdragene</h2><p>Du får '+MISSIONS.length+' oppdrag. I hvert oppdrag finner du '+PER_MISSION+' bilder som passer temaet. Du setter ikke sammen noe ennå, du bare samler.</p>'+
       '<h3>Før du starter</h3><ol class="howto">'+
       '<li>Lag en mappe som heter <strong>Maiken-bilder</strong>, for eksempel på skrivebordet eller i OneDrive.</li>'+
       '<li>Når du finner et bilde: klikk på det så det blir stort, høyreklikk og velg <em>Lagre bilde som</em>.</li>'+
       '<li>Lagre det i mappa med navnet appen foreslår. Da finner du det lett igjen i Canva.</li></ol>'+
-      '<div class="note">Alle nyanser av fargen er lov: lys, mørk, sterk og dempet. Fargen trenger ikke fylle hele bildet, men den skal være der.</div>'+
+      '<div class="note">Tips: Velg gjerne bilder i samme fargenyanse. Da henger collagen bedre sammen.</div>'+
       '<div class="nav"><button class="btn ghost" type="button" id="prev">Forrige steg</button><button class="btn" type="button" id="startM">Start første oppdrag</button></div>';
   }
-  const p=profile(), i=state.mission, m=MISSIONS[i], ci=state.colors[i], col=ci==null?null:COLORS[ci];
-  const mini=MISSIONS.map((mm,k)=>{ const c=state.colors[k]; return '<button type="button" data-m="'+k+'" aria-label="Oppdrag '+(k+1)+': '+esc(mm.t)+(state.done[k]?' (ferdig)':'')+'"'+
-    (k===i?' aria-current="true"':'')+' style="'+(state.done[k]&&c!=null?'background:'+COLORS[c].shades[2]+';border-color:'+COLORS[c].shades[3]:'')+'"></button>'; }).join("");
-  let body='<div class="mission"><div class="num">Oppdrag '+(i+1)+' av '+MISSIONS.length+'</div><h3>'+esc(m.t)+'</h3><p>'+esc(m.q)+'</p>';
-  if(!col){
-    body+='<div class="colorbox" id="cbox"><div class="face">?</div><div>Trill for å få fargen til dette oppdraget. Du triller bare én gang.</div></div>'+
-      '<button class="btn violet" type="button" id="rollC">Trill farge</button></div>';
-  } else {
-    const tips=m.tips(p).map(s=>s+" "+col.en);
-    body+='<div class="colorbox"><div class="face" style="background:'+col.shades[2]+';color:'+(ci===2||ci===5?'#1F1A26':'#fff')+'">'+(ci+1)+'</div><div><strong>'+esc(col.t)+'</strong>'+shadesHtml(col)+'</div></div>'+
-      '<p class="task">Finn '+PER_MISSION+' bilder av «'+esc(m.t.toLowerCase().replace(/\?$/,""))+'» der '+esc(col.t.toLowerCase())+' er med.</p>'+
-      '<p>Lagre dem i mappa som:</p><div class="files">'+fileNames(i).join("<br>")+'</div>'+
-      '<p style="margin-top:14px">Søkeord du kan prøve (trykk for å kopiere). Bruk gjerne fargefilteret i bildesøket.</p>'+
-      '<div class="chips">'+tips.map(s=>'<button type="button" class="chip">'+esc(s)+'</button>').join("")+'</div>'+
-      '<label class="check"><input type="checkbox" id="doneBox"'+(state.done[i]?' checked':'')+'> Jeg har lagret '+PER_MISSION+' bilder i mappa</label></div>';
-  }
+  const p=profile(), i=state.mission, m=MISSIONS[i];
+  const mini=MISSIONS.map((mm,k)=>'<button type="button" data-m="'+k+'" aria-label="Oppdrag '+(k+1)+': '+esc(mm.t)+(state.done[k]?' (ferdig)':'')+'"'+
+    (k===i?' aria-current="true"':'')+' style="'+(state.done[k]?'background:var(--olive);border-color:var(--olive)':'')+'"></button>').join("");
+  const tips=m.tips(p);
+  const body='<div class="mission"><div class="num">Oppdrag '+(i+1)+' av '+MISSIONS.length+'</div><h3>'+esc(m.t)+'</h3><p>'+esc(m.q)+'</p>'+
+    '<p class="task">Finn '+PER_MISSION+' bilder av «'+esc(m.t.toLowerCase().replace(/\?$/,""))+'».</p>'+
+    '<p>Tips: bilder i samme fargenyanse gjør collagen mer helhetlig.</p>'+
+    '<p>Lagre dem i mappa som:</p><div class="files">'+fileNames(i).join("<br>")+'</div>'+
+    '<p style="margin-top:14px">Søkeord du kan prøve (trykk for å kopiere):</p>'+
+    '<div class="chips">'+tips.map(t=>'<button type="button" class="chip">'+esc(t)+'</button>').join("")+'</div>'+
+    '<label class="check"><input type="checkbox" id="doneBox"'+(state.done[i]?' checked':'')+'> Jeg har lagret '+PER_MISSION+' bilder i mappa</label></div>';
   const last=i===MISSIONS.length-1;
   return '<h2>Oppdragene</h2><p>'+doneCount()+' av '+MISSIONS.length+' oppdrag er ferdige.</p><div class="mini">'+mini+'</div>'+body+
     '<div class="nav"><button class="btn ghost" type="button" id="mprev">'+(i===0?'Tilbake til forklaringen':'Forrige oppdrag')+'</button>'+
@@ -332,19 +319,13 @@ function(){
   return '<div class="final"><h2>Min Maiken</h2><p>Ta skjermbilde av denne og lever den sammen med collagen.</p>'+
     '<section>'+CATS.map(c=>line(c.name,p[c.key].t)).join("")+'</section>'+
         '<section><span class="k">Om henne:</span> '+esc(QUIZ.map((q,k)=>state.quiz[k]!=null?q.o[state.quiz[k]][1]:null).filter(Boolean).join(", ")||"ikke svart")+'</section>'+
-    '<section><span class="k">Oppdragene ('+doneCount()+' av '+MISSIONS.length+' ferdige):</span>'+MISSIONS.map((m,k)=>{ const c=state.colors[k];
-      return '<div class="row"><span class="dot" style="background:'+(c!=null?COLORS[c].shades[2]:'#fff')+'"></span>'+esc(m.t)+(c!=null?' – '+esc(COLORS[c].t.toLowerCase()):'')+'</div>'; }).join("")+'</section>'+
+    '<section><span class="k">Oppdragene ('+doneCount()+' av '+MISSIONS.length+' ferdige):</span>'+MISSIONS.map((m,k)=>'<div class="row"><span class="dot" style="background:'+(state.done[k]?'var(--olive)':'#fff')+'"></span>'+esc(m.t)+'</div>').join("")+'</section>'+
     '<section>'+line("Overskrift",f.head+(w.head?" – "+w.head:""))+line("Sitat",f.quote+(w.quote?" – "+w.quote:""))+line("Stemningsord",f.word+(w.word?" – "+w.word:""))+'</section>'+
     '<section><span class="k">Paletten min:</span><div class="palrow">'+state.palette.map(c=>'<span style="background:'+c+'"></span>').join("")+'</div></section>'+
     '<section>'+line("Valgte bort",state.away)+line("Maiken ville ikke likt",state.dislike)+'</section></div>'+nav();
 }
 ];
 
-function rollColor(i){
-  const prev=state.colors[i-1], next=state.colors[i+1];
-  const pool=COLORS.map((_,k)=>k).filter(k=>k!==prev && k!==next);
-  return pool[Math.floor(Math.random()*pool.length)];
-}
 
 function render(){
   renderLapp(); renderSteps();
@@ -363,9 +344,6 @@ function render(){
   if(s===2){
     const st=document.getElementById("startM"); if(st) st.onclick=()=>{ state.mission=0; save(); render(); };
     document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{ state.mission=+b.dataset.m; save(); render(); });
-    const rc=document.getElementById("rollC");
-    if(rc) rc.onclick=()=>{ rc.disabled=true; const box=document.getElementById("cbox"); box.classList.add("rolling");
-      animate(box.querySelectorAll(".face"),8,()=>{ state.colors[state.mission]=rollColor(state.mission); save(); render(); }); };
     const db=document.getElementById("doneBox"); if(db) db.onchange=e=>{ state.done[state.mission]=e.target.checked; save(); render(); };
     const mp=document.getElementById("mprev"), mn=document.getElementById("mnext");
     if(mp) mp.onclick=()=>{ state.mission--; save(); render(); window.scrollTo({top:0}); };
