@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Maiken – veileder for collagen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#005666; --olive:#426600; --purple:#4F0066; --brown:#662F00; --violet:#9621BA;
+  --ink:#1F1A26; --paper:#F1F4F4; --card:#FFFFFF; --line:#D6DEDF;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+.wrap{max-width:760px;margin:0 auto;padding:24px 20px 80px}
+h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0}
+h1{font-size:clamp(2.2rem,6vw,3.4rem);font-weight:800;letter-spacing:-.02em;color:var(--purple)}
+h2{font-size:1.7rem;font-weight:800;color:var(--purple);margin-bottom:.4em}
+h3{font-size:1.15rem;font-weight:700;margin-top:1em}
+p{margin:.4em 0 .9em;max-width:65ch}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+
+.lapp{position:relative;background:#fff;border-radius:4px;padding:18px 20px 16px;margin:18px 0 26px;
+  box-shadow:0 2px 0 var(--line),0 10px 24px -14px rgba(79,0,102,.45);transform:rotate(-1.2deg)}
+.lapp::before{content:"";position:absolute;top:-11px;left:50%;width:96px;height:22px;margin-left:-48px;
+  background:rgba(150,33,186,.4);transform:rotate(2deg)}
+.lapp h3{font-size:1.6rem;color:var(--purple);margin:0}
+.lapp dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0 0}
+.lapp dt{color:var(--teal);font-weight:700}
+.lapp dd{margin:0}
+.lapp .empty{color:var(--teal)}
+
+.steps{display:flex;gap:6px;list-style:none;padding:0;margin:0 0 22px;flex-wrap:wrap}
+.steps button{width:40px;height:40px;border-radius:50%;border:2px solid var(--teal);background:transparent;
+  font-family:var(--display);font-weight:700;color:var(--teal);cursor:pointer}
+.steps button[aria-current="step"]{background:var(--teal);color:#fff}
+.steps button.done{background:var(--olive);border-color:var(--olive);color:#fff}
+.steps button:disabled{opacity:.35;cursor:not-allowed}
+
+.panel{background:var(--card);border-radius:14px;padding:26px 24px;border:1px solid var(--line)}
+.lead{font-size:1.1rem}
+
+.dice{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:18px 0}
+.die{border:2px solid var(--line);border-radius:12px;padding:12px;text-align:center;background:var(--paper)}
+.face{width:54px;height:54px;margin:0 auto 8px;border-radius:12px;background:var(--purple);color:#fff;
+  display:grid;place-items:center;font-family:var(--display);font-size:1.8rem;font-weight:800}
+.die .cat{font-weight:700;color:var(--teal);font-size:.9rem}
+.die .val{font-size:.95rem;line-height:1.3;margin-top:4px}
+.rolling .face{animation:shake .5s ease-in-out infinite}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
+
+.btn{display:inline-block;border:0;border-radius:999px;padding:12px 22px;font-weight:700;cursor:pointer;
+  background:var(--teal);color:#fff;text-decoration:none}
+.btn:hover{background:#003f4b}
+.btn.ghost{background:transparent;color:var(--teal);border:2px solid var(--teal)}
+.btn.olive{background:var(--olive)}
+.btn.violet{background:var(--violet)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px;flex-wrap:wrap}
+
+textarea,input[type=text]{width:100%;border:2px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
+textarea{min-height:110px;resize:vertical}
+label{font-weight:700;display:block;margin:14px 0 6px}
+.howto{padding-left:1.3em}
+.howto li{margin-bottom:.6em}
+.note{background:#EEF3E6;border-left:4px solid var(--olive);padding:10px 14px;border-radius:6px;margin:14px 0}
+
+.mini{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;margin:4px 0 18px}
+.mini button{aspect-ratio:1;border:2px solid var(--line);border-radius:4px;background:#fff;cursor:pointer;padding:0}
+.mini button[aria-current="true"]{border-color:var(--purple);border-width:3px}
+.mission{border:2px dashed var(--teal);border-radius:12px;padding:20px}
+.mission .num{color:var(--teal);font-weight:700}
+.mission h3{font-size:1.5rem;color:var(--purple);margin:.1em 0 .3em}
+.colorbox{display:flex;gap:16px;align-items:center;background:var(--paper);border-radius:12px;padding:14px;margin:14px 0}
+.colorbox .face{margin:0;flex:none}
+.shades{display:flex;gap:4px;margin-top:6px}
+.shades span{width:30px;height:22px;border-radius:3px;border:1px solid rgba(0,0,0,.15)}
+.task{font-size:1.1rem;font-weight:700}
+.files{font-family:var(--body);background:var(--paper);border-radius:8px;padding:8px 12px;display:inline-block}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+.chip.copied{background:var(--olive);color:#fff}
+.check{display:flex;gap:10px;align-items:center;margin-top:16px;font-weight:700}
+.check input{width:22px;height:22px;accent-color:var(--olive)}
+
+.qprog{color:var(--teal);font-weight:700}
+.qtext{font-family:var(--display);font-size:1.6rem;font-weight:700;color:var(--purple);margin:.3em 0 .8em;line-height:1.2}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.opt{border:2px solid var(--teal);background:#fff;border-radius:14px;padding:18px 12px;font-weight:700;font-size:1.05rem;cursor:pointer;color:var(--teal)}
+.opt:hover{background:var(--teal);color:#fff}
+.answers{list-style:none;padding:0;margin:10px 0}
+.answers li{padding:8px 0;border-bottom:1px solid var(--line)}
+.answers .k{color:var(--teal);font-weight:700}
+.pal{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.pal input[type=color]{width:58px;height:58px;border:2px solid var(--line);border-radius:10px;padding:2px;background:#fff;cursor:pointer}
+
+.final{background:#fff;border-radius:14px;padding:26px;border:3px solid var(--purple)}
+.final section{margin-top:14px}
+.final .k{color:var(--teal);font-weight:700}
+.final .row{display:flex;gap:8px;align-items:center}
+.final .dot{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.15);flex:none}
+.final .palrow{display:flex;gap:6px;margin-top:6px}
+.final .palrow span{width:40px;height:40px;border-radius:6px;border:1px solid rgba(0,0,0,.15)}
+
+footer{margin-top:40px;text-align:center}
+footer button{background:none;border:0;color:var(--teal);text-decoration:underline;cursor:pointer}
+
+@media (max-width:560px){ .mini{grid-template-columns:repeat(6,1fr)} .panel{padding:20px 16px} }
+@media (prefers-reduced-motion:reduce){ .rolling .face{animation:none} .lapp{transform:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Lag en collage for Maiken</h1>
+  <p class="lead">Maiken er 22 og bor alene i sin første leilighet. Resten av livet hennes bestemmer terningene. Du lager collagen for henne, ikke for deg selv.</p>
+  <div class="lapp" id="lapp" aria-live="polite"></div>
+  <ol class="steps" id="steps" aria-label="Steg"></ol>
+  <main class="panel" id="panel"></main>
+  <footer><button id="reset" type="button">Start helt på nytt</button></footer>
+</div>
+
+<script>
+// Bytt til malkoblingen fra Canva (Del → Malkobling) før du deler appen med elevene.
+const CANVA_URL = "https://canva.link/j1xqzgadz7fc6tr";
+const PER_MISSION = 3;
+
+const CATS = [
+  { key:"bosted", name:"Bosted", options:[
+    { t:"Liten leilighet midt i Oslo", kw:["small city apartment","Oslo street"], view:"city rooftops", move:"tram city" },
+    { t:"Hybel i Tromsø", kw:["student room","Tromsø winter"], view:"snowy mountains", move:"bus snow" },
+    { t:"Deler et gammelt hus med venner på bygda", kw:["old farmhouse","Norwegian countryside"], view:"fields fog", move:"old car countryside" },
+    { t:"Bor på en seilbåt i Bergen", kw:["sailboat cabin","Bergen harbour"], view:"harbour boats", move:"rowing boat" },
+    { t:"Rekkehus i en drabantby", kw:["row houses suburb","suburban street"], view:"suburb parking lot", move:"city bus" },
+    { t:"Leilighet over en butikk i en liten kystby", kw:["small coastal town","shop window"], view:"sea view window", move:"bicycle coast" }
+  ]},
+  { key:"jobb", name:"Jobb/studier", options:[
+    { t:"Sykepleierstudent som jobber nattevakter", kw:["night shift nurse","hospital corridor"], wear:"scrubs", touch:"latex gloves" },
+    { t:"Lærling som elektriker", kw:["electrician apprentice","cables tools"], wear:"work clothes", touch:"copper wire" },
+    { t:"Baker som starter på jobb klokka fire om morgenen", kw:["bakery early morning","flour hands"], wear:"apron", touch:"flour dough" },
+    { t:"Studerer arkitektur", kw:["architecture student","scale model"], wear:"minimal outfit", touch:"tracing paper" },
+    { t:"Jobber i barnehage", kw:["kindergarten","children drawings"], wear:"rain gear", touch:"crayons" },
+    { t:"Driver en liten nettbutikk fra stua", kw:["packing orders","home office"], wear:"hoodie", touch:"cardboard" }
+  ]},
+  { key:"interesse", name:"Interesse", options:[
+    { t:"Klatring", kw:["climbing chalk hands","bouldering"], item:"chalk bag", touch:"climbing rock" },
+    { t:"Spiller trommer i et band", kw:["drummer","drum sticks"], item:"drum sticks", touch:"drum skin" },
+    { t:"Gamle filmkameraer og analog fotografering", kw:["film camera","darkroom"], item:"film roll", touch:"film negatives" },
+    { t:"Styrkeløft", kw:["weightlifting","barbell chalk"], item:"lifting straps", touch:"barbell knurling" },
+    { t:"Planter, har altfor mange av dem", kw:["houseplants","plant shelf"], item:"plant cutting", touch:"soil" },
+    { t:"Gaming, strømmer på kveldstid", kw:["gaming setup","headset"], item:"headphones", touch:"keyboard keys" }
+  ]},
+  { key:"uventet", name:"Uventet", options:[
+    { t:"Har et hemmelig talent for opera", kw:["opera singer","sheet music"] },
+    { t:"Samler på gamle skilt", kw:["vintage signs","old metal sign"] },
+    { t:"Har kjørt motorsykkel siden hun var 16", kw:["motorcycle helmet","motorcycle road"] },
+    { t:"Er redd for fugler", kw:["birds flying","pigeons"] },
+    { t:"Har bodd et år i Japan", kw:["Tokyo street","Japanese stationery"] },
+    { t:"Har aldri sett en Star Wars-film og nekter å gjøre det", kw:["movie night sofa","popcorn"] }
+  ]}
+];
+
+const COLORS = [
+  { t:"Rød", en:"red", shades:["#F7C6C6","#E86A6A","#C62828","#8E1B1B","#4A0E0E"] },
+  { t:"Blå", en:"blue", shades:["#CFE3F7","#7FB2E5","#2F6DB5","#1B3F73","#0D1F3A"] },
+  { t:"Gul", en:"yellow", shades:["#FFF3C4","#FFE066","#F2C200","#C79A00","#7A5E00"] },
+  { t:"Grønn", en:"green", shades:["#D6EFD2","#8FCB87","#3E9A3A","#1F5E1D","#0F2E0E"] },
+  { t:"Rosa", en:"pink", shades:["#FBE0EE","#F4A7CF","#E26BAA","#B03A7A","#6E1F4B"] },
+  { t:"Svart og hvit", en:"black and white", shades:["#FFFFFF","#D9D9D9","#9A9A9A","#4D4D4D","#000000"] }
+];
+
+const MISSIONS = [
+  { t:"Hvor våkner hun?", f:"vakner", q:"Hvordan ser det ut rundt henne når hun åpner øynene? Lys, rot, hva står på nattbordet?",
+    tips:p=>["bedroom "+p.bosted.kw[0], "morning light window"] },
+  { t:"Hva har hun på seg?", f:"klaer", q:"Hva tar hun på seg en helt vanlig dag? Hva har hun på seg når hun jobber?",
+    tips:p=>[p.jobb.wear, "casual outfit woman"] },
+  { t:"En vanlig tirsdag", f:"tirsdag", q:"Hvor er hun klokka 12 på en tirsdag, og hva holder hun på med?",
+    tips:p=>p.jobb.kw },
+  { t:"Hendene hennes i aksjon", f:"hender", q:"Hva gjør hendene hennes når hun driver med interessen sin?",
+    tips:p=>[p.interesse.kw[0], "hands close up"] },
+  { t:"Lørdag kveld", f:"lordag", q:"Hvor er hun lørdag kveld, og hvem er hun sammen med?",
+    tips:p=>[p.bosted.kw[1]+" night", "friends dinner", p.interesse.kw[1]] },
+  { t:"Hva har hun i veska?", f:"veska", q:"Hvis du tømmer veska hennes på bordet, hva ligger der?",
+    tips:p=>["bag contents flat lay", p.interesse.item] },
+  { t:"Utsikten fra vinduet", f:"utsikt", q:"Hva ser hun når hun står ved vinduet og drikker kaffe?",
+    tips:p=>[p.bosted.view, "view from window"] },
+  { t:"Noe hun tar på hver dag", f:"tekstur", q:"Hvilken tekstur kjenner hendene hennes hver dag? Tenk nærbilde av en overflate.",
+    tips:p=>[p.jobb.touch+" texture", p.interesse.touch+" texture"] },
+  { t:"Middagen hennes", f:"middag", q:"Hva spiser hun til middag når hun er alene hjemme en vanlig dag?",
+    tips:p=>["dinner for one", "simple home cooking"] },
+  { t:"Hvordan kommer hun seg rundt?", f:"transport", q:"Hvordan kommer hun seg til jobb eller skole?",
+    tips:p=>[p.bosted.move, "commute"] },
+  { t:"Den uventede tingen", f:"uventet", q:"Hvordan viser du det ingen vet om henne, uten å si det rett ut?",
+    tips:p=>p.uventet.kw }
+];
+
+const QUIZ = [
+  { q:"Når står Maiken opp?", o:[["Klokka fem","står opp klokka fem"],["Klokka sju","står opp klokka sju"],["Klokka ti","står opp klokka ti"]] },
+  { q:"Hva drikker hun om morgenen?", o:[["Kaffe","drikker kaffe"],["Te","drikker te"],["Energidrikk","drikker energidrikk"]] },
+  { q:"Er hun mest alene eller med folk?", o:[["Mest alene","mest alene"],["Litt av begge","litt alene, litt med folk"],["Alltid med folk","alltid med folk"]] },
+  { q:"Hvordan ser rommet hennes ut?", o:[["Ryddig","ryddig rom"],["Litt rot","litt rot"],["Kaos","kaos på rommet"]] },
+  { q:"Hva hører hun på?", o:[["Rolig musikk","hører på rolig musikk"],["Høy musikk","hører på høy musikk"],["Podkast","hører på podkast"]] }
+];
+
+const STEP_TITLES = ["Trill din Maiken","Bli kjent med Maiken","Oppdragene","Sett sammen i Canva","Tekst og fonter","Palett og refleksjon","Ferdig"];
+const KEY = "maiken-collage-v5";
+
+function fresh(){ return { step:0, roll:null, quiz:{}, qi:0, mission:-1, colors:{}, done:{},
+  fonts:{head:"",quote:"",word:""}, why:{head:"",quote:"",word:""},
+  palette:["#ffffff","#ffffff","#ffffff","#ffffff","#ffffff"], away:"", dislike:"" }; }
+let state = load() || fresh();
+
+function load(){ try{ const s=localStorage.getItem(KEY); return s?JSON.parse(s):null }catch(e){ return null } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)) }catch(e){} }
+
+function profile(){ if(!state.roll) return null; const p={}; CATS.forEach((c,i)=>{ p[c.key]=c.options[state.roll[i]] }); return p; }
+function esc(s){ return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch])) }
+function doneCount(){ return MISSIONS.filter((_,i)=>state.done[i]).length }
+function pad(n){ return String(n).padStart(2,"0") }
+function fileNames(i){ const m=MISSIONS[i]; return Array.from({length:PER_MISSION},(_,k)=>pad(i+1)+"-"+m.f+"-"+(k+1)); }
+function shadesHtml(c){ return '<div class="shades">'+c.shades.map(s=>'<span style="background:'+s+'"></span>').join("")+'</div>'; }
+
+function renderLapp(){
+  const el=document.getElementById("lapp"), p=profile();
+  if(!p){ el.innerHTML='<h3>Maiken, 22</h3><p class="empty">Trill terningene for å finne ut hvem hun er.</p>'; return; }
+  const about=QUIZ.map((q,k)=>state.quiz[k]!=null?q.o[state.quiz[k]][1]:null).filter(Boolean);
+  el.innerHTML='<h3>Maiken, 22</h3><dl>'+CATS.map(c=>'<dt>'+c.name+'</dt><dd>'+esc(p[c.key].t)+'</dd>').join("")+
+    (about.length?'<dt>Om henne</dt><dd>'+esc(about.join(", "))+'</dd>':'')+'</dl>';
+}
+function renderSteps(){
+  const ol=document.getElementById("steps");
+  ol.innerHTML=STEP_TITLES.map((t,i)=>{
+    const locked=i>0 && !state.roll;
+    return '<li><button type="button" data-step="'+i+'"'+(i===state.step?' aria-current="step"':'')+(i<state.step?' class="done"':'')+
+      (locked?' disabled':'')+' title="'+t+'" aria-label="Steg '+(i+1)+': '+t+'">'+(i+1)+'</button></li>';
+  }).join("");
+  ol.querySelectorAll("button").forEach(b=>b.onclick=()=>go(+b.dataset.step));
+}
+function nav(nextLabel="Neste steg", nextOk=true){
+  return '<div class="nav">'+(state.step>0?'<button class="btn ghost" type="button" id="prev">Forrige steg</button>':'<span></span>')+
+    (state.step<STEP_TITLES.length-1?'<button class="btn" type="button" id="next"'+(nextOk?'':' disabled')+'>'+nextLabel+'</button>':'')+'</div>';
+}
+function bindNav(){
+  const pv=document.getElementById("prev"), nx=document.getElementById("next");
+  if(pv) pv.onclick=()=>go(state.step-1);
+  if(nx) nx.onclick=()=>go(state.step+1);
+}
+function go(i){ state.step=Math.max(0,Math.min(STEP_TITLES.length-1,i)); save(); render(); window.scrollTo({top:0}); }
+
+function animate(faces, n, done){
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches; let k=0;
+  const t=setInterval(()=>{ faces.forEach(f=>f.textContent=1+Math.floor(Math.random()*6)); if(++k>(reduce?0:n)){ clearInterval(t); done(); } },90);
+}
+
+const VIEWS=[
+function(){ const r=state.roll;
+  return '<h2>Trill din Maiken</h2><p>Du triller én gang for hver kategori. Det du får, er det du jobber med.</p>'+
+    '<div class="dice" id="dice">'+CATS.map((c,i)=>'<div class="die"><div class="face">'+(r?r[i]+1:'?')+'</div><div class="cat">'+c.name+'</div><div class="val">'+(r?esc(c.options[r[i]].t):'&nbsp;')+'</div></div>').join("")+'</div>'+
+    (r?'':'<button class="btn violet" type="button" id="rollBtn">Trill terningene</button>')+nav("Neste steg",!!r);
+},
+function(){
+  const all=QUIZ.every((_,k)=>state.quiz[k]!=null);
+  if(!all){ const i=state.qi, q=QUIZ[i];
+    return '<h2>Bli kjent med Maiken</h2><p>Trykk på det som passer henne best. Det finnes ingen feil svar, bare svar som passer eller ikke passer Maiken.</p>'+
+      '<div class="qprog">Spørsmål '+(i+1)+' av '+QUIZ.length+'</div><div class="qtext">'+esc(q.q)+'</div>'+
+      '<div class="opts">'+q.o.map((o,k)=>'<button type="button" class="opt" data-o="'+k+'">'+esc(o[0])+'</button>').join("")+'</div>'+nav("Neste steg",false);
+  }
+  return '<h2>Bli kjent med Maiken</h2><p>Nå vet du mer om henne. Svarene står på lappen øverst mens du jobber.</p>'+
+    '<ul class="answers">'+QUIZ.map((q,k)=>'<li><span class="k">'+esc(q.q)+'</span> '+esc(q.o[state.quiz[k]][0])+'</li>').join("")+'</ul>'+
+    '<button class="btn ghost" type="button" id="reQuiz">Svar på nytt</button>'+nav();
+},
+function(){
+  if(state.mission<0){
+    return '<h2>Oppdragene</h2><p>Du får '+MISSIONS.length+' oppdrag. I hvert oppdrag triller du én farge og finner '+PER_MISSION+' bilder som passer temaet og fargen. Du setter ikke sammen noe ennå, du bare samler.</p>'+
+      '<h3>Før du starter</h3><ol class="howto">'+
+      '<li>Lag en mappe som heter <strong>Maiken-bilder</strong>, for eksempel på skrivebordet eller i OneDrive.</li>'+
+      '<li>Når du finner et bilde: klikk på det så det blir stort, høyreklikk og velg <em>Lagre bilde som</em>.</li>'+
+      '<li>Lagre det i mappa med navnet appen foreslår. Da finner du det lett igjen i Canva.</li></ol>'+
+      '<div class="note">Alle nyanser av fargen er lov: lys, mørk, sterk og dempet. Fargen trenger ikke fylle hele bildet, men den skal være der.</div>'+
+      '<div class="nav"><button class="btn ghost" type="button" id="prev">Forrige steg</button><button class="btn" type="button" id="startM">Start første oppdrag</button></div>';
+  }
+  const p=profile(), i=state.mission, m=MISSIONS[i], ci=state.colors[i], col=ci==null?null:COLORS[ci];
+  const mini=MISSIONS.map((mm,k)=>{ const c=state.colors[k]; return '<button type="button" data-m="'+k+'" aria-label="Oppdrag '+(k+1)+': '+esc(mm.t)+(state.done[k]?' (ferdig)':'')+'"'+
+    (k===i?' aria-current="true"':'')+' style="'+(state.done[k]&&c!=null?'background:'+COLORS[c].shades[2]+';border-color:'+COLORS[c].shades[3]:'')+'"></button>'; }).join("");
+  let body='<div class="mission"><div class="num">Oppdrag '+(i+1)+' av '+MISSIONS.length+'</div><h3>'+esc(m.t)+'</h3><p>'+esc(m.q)+'</p>';
+  if(!col){
+    body+='<div class="colorbox" id="cbox"><div class="face">?</div><div>Trill for å få fargen til dette oppdraget. Du triller bare én gang.</div></div>'+
+      '<button class="btn violet" type="button" id="rollC">Trill farge</button></div>';
+  } else {
+    const tips=m.tips(p).map(s=>s+" "+col.en);
+    body+='<div class="colorbox"><div class="face" style="background:'+col.shades[2]+';color:'+(ci===2||ci===5?'#1F1A26':'#fff')+'">'+(ci+1)+'</div><div><strong>'+esc(col.t)+'</strong>'+shadesHtml(col)+'</div></div>'+
+      '<p class="task">Finn '+PER_MISSION+' bilder av «'+esc(m.t.toLowerCase().replace(/\?$/,""))+'» der '+esc(col.t.toLowerCase())+' er med.</p>'+
+      '<p>Lagre dem i mappa som:</p><div class="files">'+fileNames(i).join("<br>")+'</div>'+
+      '<p style="margin-top:14px">Søkeord du kan prøve (trykk for å kopiere). Bruk gjerne fargefilteret i bildesøket.</p>'+
+      '<div class="chips">'+tips.map(s=>'<button type="button" class="chip">'+esc(s)+'</button>').join("")+'</div>'+
+      '<label class="check"><input type="checkbox" id="doneBox"'+(state.done[i]?' checked':'')+'> Jeg har lagret '+PER_MISSION+' bilder i mappa</label></div>';
+  }
+  const last=i===MISSIONS.length-1;
+  return '<h2>Oppdragene</h2><p>'+doneCount()+' av '+MISSIONS.length+' oppdrag er ferdige.</p><div class="mini">'+mini+'</div>'+body+
+    '<div class="nav"><button class="btn ghost" type="button" id="mprev">'+(i===0?'Tilbake til forklaringen':'Forrige oppdrag')+'</button>'+
+    (last?'<button class="btn" type="button" id="next"'+(state.done[i]?'':' disabled')+'>Videre til Canva</button>'
+         :'<button class="btn" type="button" id="mnext"'+(state.done[i]?'':' disabled')+'>Neste oppdrag</button>')+'</div>';
+},
+function(){
+  return '<h2>Sett sammen i Canva</h2><p>Nå har du mappa full av bilder. Da er det tid for å bygge collagen.</p>'+
+    '<p><a class="btn olive" href="'+CANVA_URL+'" target="_blank" rel="noopener">Åpne Maiken-malen i Canva</a></p>'+
+    '<ol class="howto">'+
+    '<li>Gå til Opplastinger, trykk Last opp filer og velg alle bildene i mappa Maiken-bilder.</li>'+
+    '<li>Rutene er nummerert som oppdragene. Oppdrag 1 har tre ruter merket «1», og bildene dine heter 01-vakner-1, -2 og -3.</li>'+
+    '<li>Dra bildet over ruta og vent til ruta lyser opp. Slipp.</li>'+
+    '<li>Dobbeltklikk på bildet for å flytte og zoome utsnittet.</li>'+
+    '<li>Klikk på den grå teksten over ruta og trykk Delete.</li></ol>'+
+    '<div class="note">Hvert oppdrag har tre bilder og tre ruter. Ett bilde i hver rute.</div>'+
+    '<div class="note">Gikk noe galt? Ctrl+Z (Cmd+Z på Mac) angrer det siste du gjorde.</div>'+nav();
+},
+function(){
+  const row=(k,label)=>'<label for="f-'+k+'">'+label+'</label><input type="text" id="f-'+k+'" data-f="'+k+'" value="'+esc(state.fonts[k])+'" placeholder="Navnet på fonten">'+
+    '<label for="w-'+k+'" style="font-weight:400">Hvorfor passer den Maiken?</label><input type="text" id="w-'+k+'" data-w="'+k+'" value="'+esc(state.why[k])+'">';
+  return '<h2>Tekst og fonter</h2><p>Skriv i tekstfeltene i malen: ett ord om Maiken som overskrift, noe hun kunne sagt, og to stemningsord. Hver av dem skal ha sin egen font.</p>'+
+    '<div class="note">Velg fonter som passer Maiken, ikke deg. Spør deg selv: ville hun skrevet sånn?</div>'+
+    row("head","Font for overskriften")+row("quote","Font for sitatet")+row("word","Font for stemningsordene")+nav();
+},
+function(){
+  return '<h2>Palett og refleksjon</h2><p>Nederst til høyre i malen er det fem hvite fargefelt. Klikk på ett av dem, velg fargeikonet og bruk pipetten til å hente en farge fra collagen din. Gjør det for alle fem, og legg de samme fargene inn her.</p>'+
+    '<div class="pal">'+state.palette.map((c,k)=>'<input type="color" data-p="'+k+'" value="'+c+'" aria-label="Farge '+(k+1)+'">').join("")+'</div>'+
+    '<label for="away">Hvilket bilde valgte du bort, og hvorfor?</label><textarea id="away">'+esc(state.away)+'</textarea>'+
+    '<label for="dislike">Hva ville Maiken ikke likt?</label><textarea id="dislike">'+esc(state.dislike)+'</textarea>'+nav("Se oppsummeringen");
+},
+function(){
+  const p=profile(), f=state.fonts, w=state.why;
+  const line=(k,v)=>'<div><span class="k">'+k+':</span> '+(v?esc(v):'<em>ikke fylt ut</em>')+'</div>';
+  return '<div class="final"><h2>Min Maiken</h2><p>Ta skjermbilde av denne og lever den sammen med collagen.</p>'+
+    '<section>'+CATS.map(c=>line(c.name,p[c.key].t)).join("")+'</section>'+
+        '<section><span class="k">Om henne:</span> '+esc(QUIZ.map((q,k)=>state.quiz[k]!=null?q.o[state.quiz[k]][1]:null).filter(Boolean).join(", ")||"ikke svart")+'</section>'+
+    '<section><span class="k">Oppdragene ('+doneCount()+' av '+MISSIONS.length+' ferdige):</span>'+MISSIONS.map((m,k)=>{ const c=state.colors[k];
+      return '<div class="row"><span class="dot" style="background:'+(c!=null?COLORS[c].shades[2]:'#fff')+'"></span>'+esc(m.t)+(c!=null?' – '+esc(COLORS[c].t.toLowerCase()):'')+'</div>'; }).join("")+'</section>'+
+    '<section>'+line("Overskrift",f.head+(w.head?" – "+w.head:""))+line("Sitat",f.quote+(w.quote?" – "+w.quote:""))+line("Stemningsord",f.word+(w.word?" – "+w.word:""))+'</section>'+
+    '<section><span class="k">Paletten min:</span><div class="palrow">'+state.palette.map(c=>'<span style="background:'+c+'"></span>').join("")+'</div></section>'+
+    '<section>'+line("Valgte bort",state.away)+line("Maiken ville ikke likt",state.dislike)+'</section></div>'+nav();
+}
+];
+
+function rollColor(i){
+  const prev=state.colors[i-1], next=state.colors[i+1];
+  const pool=COLORS.map((_,k)=>k).filter(k=>k!==prev && k!==next);
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+function render(){
+  renderLapp(); renderSteps();
+  document.getElementById("panel").innerHTML=VIEWS[state.step]();
+  bindNav();
+  const s=state.step;
+  if(s===0){
+    const b=document.getElementById("rollBtn");
+    if(b) b.onclick=()=>{ b.disabled=true; const d=document.getElementById("dice"); d.classList.add("rolling");
+      animate(d.querySelectorAll(".face"),8,()=>{ state.roll=CATS.map(()=>Math.floor(Math.random()*6)); save(); render(); }); };
+  }
+  if(s===1){
+    document.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{ state.quiz[state.qi]=+b.dataset.o; state.qi=Math.min(state.qi+1,QUIZ.length-1); save(); render(); });
+    const rq=document.getElementById("reQuiz"); if(rq) rq.onclick=()=>{ state.quiz={}; state.qi=0; save(); render(); };
+  }
+  if(s===2){
+    const st=document.getElementById("startM"); if(st) st.onclick=()=>{ state.mission=0; save(); render(); };
+    document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{ state.mission=+b.dataset.m; save(); render(); });
+    const rc=document.getElementById("rollC");
+    if(rc) rc.onclick=()=>{ rc.disabled=true; const box=document.getElementById("cbox"); box.classList.add("rolling");
+      animate(box.querySelectorAll(".face"),8,()=>{ state.colors[state.mission]=rollColor(state.mission); save(); render(); }); };
+    const db=document.getElementById("doneBox"); if(db) db.onchange=e=>{ state.done[state.mission]=e.target.checked; save(); render(); };
+    const mp=document.getElementById("mprev"), mn=document.getElementById("mnext");
+    if(mp) mp.onclick=()=>{ state.mission--; save(); render(); window.scrollTo({top:0}); };
+    if(mn) mn.onclick=()=>{ state.mission++; save(); render(); window.scrollTo({top:0}); };
+    document.querySelectorAll(".chip").forEach(c=>c.onclick=async()=>{
+      try{ await navigator.clipboard.writeText(c.textContent); c.classList.add("copied"); c.textContent="Kopiert"; setTimeout(render,900); }catch(e){} });
+  }
+  if(s===4){
+    document.querySelectorAll("[data-f]").forEach(i=>i.oninput=e=>{ state.fonts[i.dataset.f]=e.target.value; save(); });
+    document.querySelectorAll("[data-w]").forEach(i=>i.oninput=e=>{ state.why[i.dataset.w]=e.target.value; save(); });
+  }
+  if(s===5){
+    document.querySelectorAll("[data-p]").forEach(i=>i.oninput=e=>{ state.palette[+i.dataset.p]=e.target.value; save(); });
+    document.getElementById("away").oninput=e=>{ state.away=e.target.value; save(); };
+    document.getElementById("dislike").oninput=e=>{ state.dislike=e.target.value; save(); };
+  }
+}
+
+document.getElementById("reset").onclick=()=>{
+  if(confirm("Vil du slette alt og trille en ny Maiken?")){ try{ localStorage.removeItem(KEY) }catch(e){} state=fresh(); render(); }
+};
+render();
+</script>
+</body>
+</html>
